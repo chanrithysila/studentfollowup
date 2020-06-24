@@ -7,9 +7,7 @@ use App\User;
 use App\Comment;
 class Student extends Model
 {
-    protected $fillable = [
-        'picture','firstname','lastname','class','description','user_id'
-    ];
+    
     public function user(){
         return $this->belongsTo(User::class);
     }

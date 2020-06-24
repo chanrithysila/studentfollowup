@@ -24,5 +24,5 @@ Route::get('/', function (){
 });
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/home', 'StudentController@index')->name('home');
-Route::put('students', 'StudentController@create')->name('students');
-Route::get('students','StudentController@store')->name('students');
+Route::resource('students', 'StudentController');
+// Route::get('students','StudentController@store')->name('students');

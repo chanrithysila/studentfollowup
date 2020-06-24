@@ -43,11 +43,16 @@ class StudentController extends Controller
         $students->firstname = $request->get('firstname');
         $students->lastname = $request->get('lastname');
         $students->class = $request->get('class');
-        $students->picture = $request->get('picture');
         $students->description = $request->get('description');
+        if ($request->hasfile('picture')){
+            $file = $request->file('picture');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time(). ".".$extension;
+            $file->move('img/', $filename);
+            $students->picture = $filename;
+            $students->save();
+        }
         $students->save();
-        // dd($students->firstname);
-        // die();
         return redirect('home');
     }
 
@@ -60,7 +65,7 @@ class StudentController extends Controller
     public function show($id)
     {
         $students = Student::find($id);
-        return view('students.show', compact('students'));
+        return view('home.show', compact('students'));
     }
 
     /**
@@ -71,8 +76,8 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        // $students = Student::find($id);
-        // return view('students', compact('students'));
+        $students = Student::find($id);
+        return view('/home', compact('students'));
     }
 
     /**
@@ -84,15 +89,24 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // $students = Student::find($id);
+        $students = Student::find($id);
 
-        // $students->firstname = $request->get('firstname');
-        // $students->lastname = $request->get('lastname');
-        // $students->class = $request->get('class');
-        // $students->description = $request->get('description');
+        $students->firstname = $request->get('firstname');
+        $students->lastname = $request->get('lastname');
+        $students->class = $request->get('class');
+        $students->description = $request->get('description');
         // $students->picture = $request->get('picture');
-        // $students -> save();
-        // return redirect('home');
+        // $students->picture = $request->file('picture');
+        if($request->has('picture')) {
+            $file = $request->file('picture');
+            $filename = $file->getClientOriginalName();
+            $file->move(public_path('img/'), $filename);
+            $students->picture = $request->file('picture')->getClientOriginalName();
+        }
+    
+        $students->update();
+    
+        return redirect('home');
     }
 
     /**
